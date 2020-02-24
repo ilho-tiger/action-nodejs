@@ -1,6 +1,19 @@
+"use strict";
+
 const request = require("request");
 const cheerio = require("cheerio");
 const fs = require('fs');
+
+function sendSlackMessage(message, incoming_webhook_url) {
+    request.post(
+        incoming_webhook_url,
+        {
+            json: {
+                text: message
+            }
+        }
+    )
+}
 
 request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=&contSeq=&board_id=&gubun=", function (error, response, body) {
     if (error && response.statusCode !== 200) {
@@ -8,9 +21,15 @@ request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=
         console.log("statusCode:", response && response.statusCode);
     }
     // console.log(body);
-    fs.writeFileSync('./body.html', body);
+    // fs.writeFileSync('./body.html', body);
     const $ = cheerio.load(body);
+    
+    let resultString = ""
+    resultString += $(".s_descript").first().text() + " - (한국시각)\n\n";
     $(".s_listin_dot").first().find("li").each((index, element) => {
-        console.log($(element).text());
+        resultString += $(element).text() + "\n"
     });
+
+    console.log(resultString);
+    sendSlackMessage(resultString, "https://hooks.slack.com/services/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");
 });
