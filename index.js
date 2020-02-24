@@ -4,6 +4,12 @@ const request = require("request");
 const cheerio = require("cheerio");
 const fs = require('fs');
 
+if (!process.env.slack_webhook) {
+    console.log("No slack_webhook URL found");
+    process.exit(1)
+}
+let slack_webhook = process.env.slack_webhook
+
 function sendSlackMessage(message, incoming_webhook_url) {
     request.post(
         incoming_webhook_url,
@@ -39,5 +45,5 @@ request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=
     });
 
     console.log(resultString);
-    sendSlackMessage(resultString, "https://hooks.slack.com/services/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");
+    sendSlackMessage(resultString, slack_webhook);
 });
