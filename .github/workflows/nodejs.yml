@@ -17,9 +17,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-      env: # Or as an environment variable
-        slack_webhook: ${{ secrets.slack_webhook }}
     - run: npm install
     - run: node index.js
       env:
         CI: true
+        slack_webhook: ${{ secrets.slack_webhook }}
+
