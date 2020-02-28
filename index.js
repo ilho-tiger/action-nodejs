@@ -39,12 +39,28 @@ request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=
     const $ = cheerio.load(body);
 
     let resultString = ""
-    resultString += $(".s_descript").first().text() + " - (한국시각)\n\n";
+    resultString += $(".s_descript").first().text() + " - (한국시각)\n";
+    resultString += "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)\n\n"
 
-    $(".num").first().children().find('tr').each(function() {
-        let title = $(this).find('th').text();
-        let value = $(this).find('td').text();
-        resultString += "(" + title + ") " + value + "\n";
+    let isFirst = true;
+    $(".num").each(function () {
+        if (isFirst) {
+            $(this).children().find('tr').each(function () {
+                let title = $(this).find('th').text();
+                let value = $(this).find('td').text();
+                resultString += "(" + title + ") " + value + "\n";
+                isFirst = false;
+            });
+        }
+        else {
+            $(this).children().find('tr').each(function() {
+                if($(this).text().includes("미국")){
+                    let title = "\n(미국 발생현황)"
+                    let value = $(this).find('td:not(.w_bold)').text();
+                    resultString += title + " " + value + "\n";
+                }
+            });
+        }
     });
 
     console.log(resultString);
