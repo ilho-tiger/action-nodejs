@@ -40,8 +40,11 @@ request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=
 
     let resultString = ""
     resultString += $(".s_descript").first().text() + " - (한국시각)\n\n";
-    $(".s_listin_dot").first().find("li").each((index, element) => {
-        resultString += $(element).text() + "\n"
+
+    $(".num").first().children().find('tr').each(function() {
+        let title = $(this).find('th').text();
+        let value = $(this).find('td').text();
+        resultString += "(" + title + ") " + value + "\n";
     });
 
     console.log(resultString);
