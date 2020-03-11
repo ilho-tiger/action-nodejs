@@ -34,6 +34,16 @@ function getTwoDigitPaddedNumberString(number) {
     return number < 10 ? '0' + number : number;
 }
 
+function getStatMessageString(totalNumbersInUs, postfix_to_prop="") {
+    let resultString = "";
+    for (var prop in totalNumbersInUs) {
+        if (totalNumbersInUs.hasOwnProperty(prop)) {
+            resultString += "(" + prop + postfix_to_prop +") " + totalNumbersInUs[prop] + "\n";
+        }
+    }
+    return resultString;
+}
+
 let getKoreaStatus = function () {
     request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=&contSeq=&board_id=&gubun=", function (error, response, body) {
         if (error && response.statusCode !== 200) {
@@ -108,20 +118,26 @@ let getUsStatus = function () {
             Deaths: 0,
             Recovered: 0
         };
+        let numbersInGa = {
+            Confirmed: 0,
+            Deaths: 0,
+            Recovered: 0
+        }
         dailyReport.data.forEach(element => {
             if (element[1] === "US") {
                 headerToFind.forEach(header => {
                     let value = element[header.index];
                     totalNumbersInUs[header.title] += Number(value);
+                    if(element[0] === "Georgia") {
+                        numbersInGa[header.title] += Number(value);
+                    }
                 });
+
             }
         });
 
-        for (var prop in totalNumbersInUs) {
-            if (totalNumbersInUs.hasOwnProperty(prop)) {
-                resultString += "(" + prop + ") " + totalNumbersInUs[prop] + "\n";
-            }
-        }
+        resultString += getStatMessageString(totalNumbersInUs) + "\n";
+        resultString += getStatMessageString(numbersInGa, " in GA")
         console.log(resultString);
         sendSlackMessage(resultString, slack_webhook);
     });
