@@ -57,11 +57,12 @@ request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=
             });
             
             for(let i=0;i<heads.length; i++){
-                resultString += heads[i] + ": " + bodies[i] + "\n";
+                resultString += "(" + heads[i] + ") " + bodies[i] + " 명\n";
             }
         }
     });
 
     console.log(resultString);
-    sendSlackMessage(resultString, slack_webhook);
+    // sendSlackMessage(resultString, slack_webhook);
 });
+
