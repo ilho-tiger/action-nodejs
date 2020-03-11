@@ -43,23 +43,22 @@ request("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=
     resultString += "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)\n\n"
 
     let isFirst = true;
-    $(".num").each(function () {
+
+    $(".data_table").each(function () {
         if (isFirst) {
-            $(this).children().find('tr').each(function () {
-                let title = $(this).find('th').text();
-                let value = $(this).find('td').text();
-                resultString += "(" + title + ") " + value + "\n";
-                isFirst = false;
+            isFirst = false;
+            let heads = [];
+            let bodies = [];
+            $(this).children().find('thead').children().find('th').each(function() {
+                heads.push($(this).text());
             });
-        }
-        else {
-            $(this).children().find('tr').each(function() {
-                if($(this).text().includes("미국")){
-                    let title = "\n(미국 발생현황)"
-                    let value = $(this).find('td:not(.w_bold)').text();
-                    resultString += title + " " + value + "\n";
-                }
+            $(this).children().find('tbody').children().find('td').each(function () {
+                bodies.push($(this).text());
             });
+            
+            for(let i=0;i<heads.length; i++){
+                resultString += heads[i] + ": " + bodies[i] + "\n";
+            }
         }
     });
 
