@@ -34,11 +34,11 @@ function getTwoDigitPaddedNumberString(number) {
     return number < 10 ? '0' + number : number;
 }
 
-function getStatMessageString(totalNumbersInUs, postfix_to_prop="") {
+function getStatMessageString(totalNumbersInUs, postfix_to_prop = "") {
     let resultString = "";
     for (var prop in totalNumbersInUs) {
         if (totalNumbersInUs.hasOwnProperty(prop)) {
-            resultString += "(" + prop + postfix_to_prop +") " + totalNumbersInUs[prop] + "\n";
+            resultString += "(" + prop + postfix_to_prop + ") " + totalNumbersInUs[prop] + "\n";
         }
     }
     return resultString;
@@ -51,7 +51,7 @@ let getKoreaStatus = function () {
             console.log("statusCode:", response && response.statusCode);
         }
         // console.log(body);
-        // fs.writeFileSync('./body.html', body);
+        // fs.writeFileSync('./data.html', body);
         const $ = cheerio.load(body);
 
         let resultString = ""
@@ -128,7 +128,7 @@ let getUsStatus = function () {
                 headerToFind.forEach(header => {
                     let value = element[header.index];
                     totalNumbersInUs[header.title] += Number(value);
-                    if(element[0] === "Georgia") {
+                    if (element[0] === "Georgia") {
                         numbersInGa[header.title] += Number(value);
                     }
                 });
@@ -143,5 +143,66 @@ let getUsStatus = function () {
     });
 }
 
+let getGaStatus = function () {
+    request("https://dph.georgia.gov/covid-19-daily-status-report", function (error, response, body) {
+        if (error && response !== 200) {
+            console.error("error:", error);
+            console.log("statusCode:", response && response.statusCode);
+        }
+
+        // fs.writeFileSync('./data.html', body);
+        let gaTotal = {
+            Total: "",
+            Deaths: ""
+        };
+        let topTenCounties = [];
+        let reportGenerated = "";
+
+        const $ = cheerio.load(body);
+        $(".stacked-row-plus").each(function () {
+            let caption = $(this).find("caption").text();
+            if (caption.includes('Confirmed cases and deaths in Georgia')) {
+                $(this).find('tbody').find('tr').each(function () {
+                    let element = $(this).text();
+                    let split = element.split('\n');
+                    gaTotal[split[0]] = split[1];
+                });
+            }
+            else if(caption.includes('by County')){
+                let counties = [];
+                $(this).find('tbody').find('tr').each(function(){
+                    let element = $(this).text();
+                    let split = element.split('\n');
+                    counties.push(split);
+                });
+                topTenCounties = counties.slice(0, 10);
+            }
+        });
+
+        $(".body-content").children().find("em").each(function(){
+            let element = $(this).text();
+            if(element.includes("generated on:")){
+                reportGenerated = element.split(': ')[1] + " EDT";
+            }
+        })
+
+        let message = "";
+        message += "COVID-19 Daily Status Report (GA Only / " + reportGenerated + ")\n";
+        message += "Data from Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)\n\n";
+
+        message += "(GA Total Confirmed) " + gaTotal.Total + "\n";
+        message += "(GA Total Deathes) " + gaTotal.Deaths + "\n\n";
+
+        message += "(Top 10 Counties in GA):\n";
+        let index = 1;
+        topTenCounties.forEach(county => {
+            message += "- " + index++ + ": " + county[0] + " (" + county[1] + ")\n";
+        });
+
+        sendSlackMessage(message, slack_webhook);
+    });
+}
+
 getKoreaStatus();
 getUsStatus();
+getGaStatus();
