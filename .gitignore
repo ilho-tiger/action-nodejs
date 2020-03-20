@@ -105,3 +105,6 @@ dist
 
 # Package lcok
 **/package-lock.json
+
+data.html
+data.csv
