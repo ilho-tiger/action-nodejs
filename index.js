@@ -186,15 +186,23 @@ let getGaStatus = function () {
             }
         })
 
-        // console.log(gaTotal);
-        // console.log(topTenCounties);
-        // console.log(reportGenerated);
+        let message = "";
+        message += "COVID-19 Daily Status Report (GA Only / " + reportGenerated + ")\n";
+        message += "Data from Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)\n\n";
 
+        message += "(GA Total Confirmed) " + gaTotal.Total + "\n";
+        message += "(GA Total Deathes) " + gaTotal.Deaths + "\n\n";
 
+        message += "(Top 10 Counties in GA):\n";
+        let index = 1;
+        topTenCounties.forEach(county => {
+            message += "- " + index++ + ": " + county[0] + " (" + county[1] + ")\n";
+        });
 
+        sendSlackMessage(message, slack_webhook);
     });
 }
 
-// getKoreaStatus();
-// getUsStatus();
+getKoreaStatus();
+getUsStatus();
 getGaStatus();
