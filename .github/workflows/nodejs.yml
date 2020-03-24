@@ -9,6 +9,7 @@ on:
 
 jobs:
   retrieve_data:
+    name: retrieve_data
 
     runs-on: ubuntu-latest
 
@@ -17,25 +18,28 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: node index.js
-      env:
-        CI: true
-        slack_webhook: ${{ secrets.slack_webhook }}
-        action_slack: ${{ secrets.action_slack }}
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-  save_data:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: committing results
-    - run: git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-    - run: git pull github ${GITHUB_REF} --ff-only
-    - run: git add ...
-    - run: git commit -m "Update native model"
-    - run: git push github HEAD:${GITHUB_REF}
+      - name: Install node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: npm install
+        run: npm install
+
+      - name: Run crawler script
+        run: node index.js
+        env:
+          CI: true
+          slack_webhook: ${{ secrets.slack_webhook }}
+          action_slack: ${{ secrets.action_slack }}
+
+      - name: Save data
+        run: |
+          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git pull github ${GITHUB_REF} --ff-only
+          git add ...
+          git commit -m "Update native model"
+          git push github HEAD:${GITHUB_REF}
