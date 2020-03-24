@@ -1,5 +1,5 @@
 {
-    "timestamp": "2020-03-24T19:09:20.112Z",
+    "timestamp": "2020-03-24T19:12:34.443Z",
     "kr": {
         "title": "코로나바이러스감염증-19 국내 발생현황 (3.24. 00시 기준) - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
@@ -21,8 +21,8 @@
         "title": "COVID-19 Daily Status Report",
         "credit": "Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)",
         "timestamp": "03/24/2020 11:18:44 EDT",
-        "confirmed": "1026 (100%)",
-        "death": "32 (3.12%)",
+        "confirmed": 1026,
+        "death": 32,
         "recovered": 0,
         "extra": {
             "perCounties": [
