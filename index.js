@@ -152,11 +152,11 @@ let getUsStatus = function () {
             Recovered: 0
         }
         dailyReport.data.forEach(element => {
-            if (element[1] === "US") {
+            if (element[3] === "US") {
                 headerToFind.forEach(header => {
                     let value = element[header.index];
                     totalNumbersInUs[header.title] += Number(value);
-                    if (element[0] === "Georgia") {
+                    if (element[2] === "Georgia") {
                         numbersInGa[header.title] += Number(value);
                     }
                 });
