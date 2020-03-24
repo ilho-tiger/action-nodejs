@@ -52,7 +52,7 @@ function sendSlackMessage(message, incoming_webhook_url) {
         );
     }
     else {
-        fs.appendFileSync('./result/data', message);
+        fs.appendFileSync('./result/data', message + "\n");
 
         message = addPrefix(message, "onSlack > ")
         console.log(message);

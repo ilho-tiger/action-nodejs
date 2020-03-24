@@ -43,5 +43,5 @@ jobs:
           git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
           git pull github ${GITHUB_REF} --ff-only
           git add ./result
-          git commit -m "Update covid-19 daily data"
+          git commit -m "chore(result): update covid-19 daily data"
           git push github HEAD:${GITHUB_REF}
