@@ -34,9 +34,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: committing results
-    - run: |
-        git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-        git pull github ${GITHUB_REF} --ff-only
-        git add ...
-        git commit -m "Update native model"
-        git push github HEAD:${GITHUB_REF}
+    - run: git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+    - run: git pull github ${GITHUB_REF} --ff-only
+    - run: git add ...
+    - run: git commit -m "Update native model"
+    - run: git push github HEAD:${GITHUB_REF}
