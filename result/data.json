@@ -1,0 +1,82 @@
+{
+    "timestamp": "2020-03-24T19:09:20.112Z",
+    "kr": {
+        "title": "코로나바이러스감염증-19 국내 발생현황 (3.24. 00시 기준) - (한국시각)",
+        "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
+        "timestamp": "코로나바이러스감염증-19 국내 발생현황 (3.24. 00시 기준) - (한국시각)",
+        "confirmed": 9037,
+        "death": 120,
+        "recovered": 3507,
+        "active": 5410
+    },
+    "us": {
+        "title": "COVID-19 Daily Report",
+        "credit": "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
+        "timestamp": "03-23-2020 23:59 UTC, 19:59 EDT)",
+        "confirmed": 43667,
+        "death": 552,
+        "recovered": 0
+    },
+    "ga": {
+        "title": "COVID-19 Daily Status Report",
+        "credit": "Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)",
+        "timestamp": "03/24/2020 11:18:44 EDT",
+        "confirmed": "1026 (100%)",
+        "death": "32 (3.12%)",
+        "recovered": 0,
+        "extra": {
+            "perCounties": [
+                {
+                    "rank": 2,
+                    "name": "Fulton",
+                    "confirmed": "184"
+                },
+                {
+                    "rank": 4,
+                    "name": "Dekalb",
+                    "confirmed": "94"
+                },
+                {
+                    "rank": 6,
+                    "name": "Dougherty",
+                    "confirmed": "90"
+                },
+                {
+                    "rank": 8,
+                    "name": "Cobb",
+                    "confirmed": "86"
+                },
+                {
+                    "rank": 10,
+                    "name": "Bartow",
+                    "confirmed": "75"
+                },
+                {
+                    "rank": 12,
+                    "name": "Gwinnett",
+                    "confirmed": "45"
+                },
+                {
+                    "rank": 14,
+                    "name": "Cherokee",
+                    "confirmed": "28"
+                },
+                {
+                    "rank": 16,
+                    "name": "Carroll",
+                    "confirmed": "26"
+                },
+                {
+                    "rank": 18,
+                    "name": "Clayton",
+                    "confirmed": "21"
+                },
+                {
+                    "rank": 20,
+                    "name": "Lee",
+                    "confirmed": "20"
+                }
+            ]
+        }
+    }
+}
