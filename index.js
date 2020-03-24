@@ -253,12 +253,15 @@ let getGaStatus = async function () {
 
     message += "(Top 10 Counties in GA):\n";
 
+
+    let confirmed = parseInt(gaTotal.Total.split(' ')[0]);
+    let death = parseInt(gaTotal.Deaths.split(' ')[0]);
     let jsonData = {
         title: "COVID-19 Daily Status Report",
         credit: "Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)",
         timestamp: reportGenerated,
-        confirmed: gaTotal.Total,
-        death: gaTotal.Deaths,
+        confirmed: confirmed,
+        death: death,
         recovered: 0,
         extra: {
             perCounties: []
