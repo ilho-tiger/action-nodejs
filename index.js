@@ -52,6 +52,8 @@ function sendSlackMessage(message, incoming_webhook_url) {
         );
     }
     else {
+        fs.appendFileSync('./result/data', message);
+
         message = addPrefix(message, "onSlack > ")
         console.log(message);
     }
@@ -228,6 +230,7 @@ let getGaStatus = function () {
     });
 }
 
+fs.writeFileSync('./result/data', "");
 getKoreaStatus();
 getUsStatus();
 getGaStatus();
