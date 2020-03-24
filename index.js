@@ -34,28 +34,28 @@ function addPrefix(str, prefix) {
     return res.join('\n');
 }
 
-function sendSlackMessage(message, incoming_webhook_url) {
+async function sendSlackMessage(message, incoming_webhook_url) {
     if (enableSlack === true) {
-        request.post(
-            incoming_webhook_url,
-            {
-                json: {
-                    text: message
-                }
-            },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    console.log(body);
-                }
-                else {
-                    console.log("error: " + error);
-                }
-            }
-        );
+        const headers = {
+            "Content-Type": "application/json",
+        }
+        const response = await fetch(incoming_webhook_url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                text: message
+            })
+        });
+
+        if (response.status != 200) {
+            console.log("error: " + await response.text());
+        }
+        else {
+            console.log("message sent");
+        }
     }
     else {
-        fs.appendFileSync(result_file, message + "\n");
-
+        // fs.appendFileSync(result_file, message + "\n");
         message = addPrefix(message, "onSlack > ")
         console.log(message);
     }
@@ -94,6 +94,7 @@ let getKoreaStatus = async function () {
     let jsonData = {
         title: $(".s_descript").first().text() + " - (한국시각)",
         credit: "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
+        timestamp: $(".s_descript").first().text() + " - (한국시각)",
         confirmed: 0,
         death: 0,
         recovered: 0,
@@ -115,11 +116,29 @@ let getKoreaStatus = async function () {
 
             for (let i = 0; i < heads.length; i++) {
                 resultString += "(" + heads[i] + ") " + bodies[i] + " 명\n";
+                let number = parseInt(bodies[i].replace(/,/g, ''));
+                switch (heads[i]) {
+                    case '확진환자':
+                        jsonData.confirmed = number;
+                        break;
+                    case '격리해제':
+                        jsonData.recovered = number;
+                        break;
+                    case '격리중':
+                        jsonData.active = number;
+                        break;
+                    case '사망':
+                        jsonData.death = number;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     });
 
     sendSlackMessage(resultString, slack_webhook);
+    return jsonData;
 };
 
 let getUsStatus = async function () {
@@ -174,6 +193,16 @@ let getUsStatus = async function () {
     resultString += getStatMessageString(totalNumbersInUs) + "\n";
     resultString += getStatMessageString(numbersInGa, " in GA")
     sendSlackMessage(resultString, slack_webhook);
+
+    let jsonData = {
+        title: "COVID-19 Daily Report",
+        credit: "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
+        timestamp: dateFormat + " 23:59 UTC, 19:59 EDT)",
+        confirmed: totalNumbersInUs.Confirmed,
+        death: totalNumbersInUs.Deaths,
+        recovered: totalNumbersInUs.Recovered
+    };
+    return jsonData;
 }
 
 let getGaStatus = async function () {
@@ -223,15 +252,51 @@ let getGaStatus = async function () {
     message += "(GA Total Deathes) " + gaTotal.Deaths + "\n\n";
 
     message += "(Top 10 Counties in GA):\n";
+
+    let jsonData = {
+        title: "COVID-19 Daily Status Report",
+        credit: "Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)",
+        timestamp: reportGenerated,
+        confirmed: gaTotal.Total,
+        death: gaTotal.Deaths,
+        recovered: 0,
+        extra: {
+            perCounties: []
+        }
+    };
+
     let index = 1;
     topTenCounties.forEach(county => {
         message += "- " + index++ + ": " + county[0] + " (" + county[1] + ")\n";
+        jsonData.extra.perCounties.push({
+            rank: index++,
+            name: county[0],
+            confirmed: county[1]
+        })
     });
 
     sendSlackMessage(message, slack_webhook);
+    return jsonData;
 }
 
-fs.writeFileSync(result_file, "");
-getKoreaStatus();
-getUsStatus();
-getGaStatus();
+async function main() {
+
+    let today = new Date();
+    let dateFormat = getTwoDigitPaddedNumberString(today.getMonth() + 1) + "-" + getTwoDigitPaddedNumberString(today.getDate()) + "-" + today.getFullYear();
+
+    let krData = await getKoreaStatus();
+    let usData = await getUsStatus();
+    let gaData = await getGaStatus();
+
+    let data = {
+        timestamp: today.toISOString(),
+        kr: krData,
+        us: usData,
+        ga: gaData
+    };
+    // console.log(JSON.stringify(data));
+    fs.writeFileSync(result_file, JSON.stringify(data, null, 4));
+
+}
+
+main();
