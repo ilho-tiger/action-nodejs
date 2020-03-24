@@ -38,8 +38,8 @@ jobs:
 
       - name: Save data
         run: |
-          git config user.email "ilho.song@siemens.com"
-          git config user.name "Ilho Song"
+          git config user.email "${{ secrets.action_commiter_email }}"
+          git config user.name "${{ secrets.action_commiter_name }}"
           git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
           git pull github ${GITHUB_REF} --ff-only
           git add ./result
