@@ -49,9 +49,12 @@ jobs:
       - name : Publish data
         run: |
           cp ./result/data.json ./bot-daily-data
+          git submodule init
+          git submodule update
           cd ./bot-daily-data
           git config user.email "${{ secrets.action_commiter_email }}"
           git config user.name "${{ secrets.action_commiter_name }}"
           git add .
+          git commit -m "chore(result): automated update of covid-19 daily data"
           git push
       
