@@ -197,7 +197,7 @@ let getUsStatus = async function () {
     let jsonData = {
         title: "COVID-19 Daily Report",
         credit: "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
-        timestamp: dateFormat + " 23:59 UTC, 19:59 EDT)",
+        timestamp: dateFormat + " 23:59 UTC, 19:59 EDT",
         confirmed: totalNumbersInUs.Confirmed,
         death: totalNumbersInUs.Deaths,
         recovered: totalNumbersInUs.Recovered
