@@ -286,7 +286,6 @@ let getGaStatus = async function () {
 async function main() {
 
     let today = new Date();
-    let dateFormat = getTwoDigitPaddedNumberString(today.getMonth() + 1) + "-" + getTwoDigitPaddedNumberString(today.getDate()) + "-" + today.getFullYear();
 
     let krData = await getKoreaStatus();
     let usData = await getUsStatus();
