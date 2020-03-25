@@ -270,12 +270,13 @@ let getGaStatus = async function () {
 
     let index = 1;
     topTenCounties.forEach(county => {
-        message += "- " + index++ + ": " + county[0] + " (" + county[1] + ")\n";
+        message += "- " + index + ": " + county[0] + " (" + county[1] + ")\n";
         jsonData.extra.perCounties.push({
-            rank: index++,
+            rank: index,
             name: county[0],
             confirmed: county[1]
-        })
+        });
+        index++;
     });
 
     sendSlackMessage(message, slack_webhook);
