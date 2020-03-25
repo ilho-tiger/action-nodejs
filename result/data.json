@@ -1,5 +1,5 @@
 {
-    "timestamp": "2020-03-25T13:20:57.522Z",
+    "timestamp": "2020-03-25T13:29:16.749Z",
     "kr": {
         "title": "코로나바이러스감염증-19 국내 발생현황 (3.25. 00시 기준) - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
@@ -27,52 +27,52 @@
         "extra": {
             "perCounties": [
                 {
-                    "rank": 2,
+                    "rank": 1,
                     "name": "Fulton",
                     "confirmed": "191"
                 },
                 {
-                    "rank": 4,
+                    "rank": 2,
                     "name": "Dekalb",
                     "confirmed": "107"
                 },
                 {
-                    "rank": 6,
+                    "rank": 3,
                     "name": "Dougherty",
                     "confirmed": "101"
                 },
                 {
-                    "rank": 8,
+                    "rank": 4,
                     "name": "Cobb",
                     "confirmed": "90"
                 },
                 {
-                    "rank": 10,
+                    "rank": 5,
                     "name": "Bartow",
                     "confirmed": "76"
                 },
                 {
-                    "rank": 12,
+                    "rank": 6,
                     "name": "Gwinnett",
                     "confirmed": "46"
                 },
                 {
-                    "rank": 14,
+                    "rank": 7,
                     "name": "Cherokee",
                     "confirmed": "30"
                 },
                 {
-                    "rank": 16,
+                    "rank": 8,
                     "name": "Carroll",
                     "confirmed": "26"
                 },
                 {
-                    "rank": 18,
+                    "rank": 9,
                     "name": "Lee",
                     "confirmed": "24"
                 },
                 {
-                    "rank": 20,
+                    "rank": 10,
                     "name": "Clayton",
                     "confirmed": "21"
                 }
