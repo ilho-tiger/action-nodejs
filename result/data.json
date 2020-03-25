@@ -1,5 +1,5 @@
 {
-    "timestamp": "2020-03-25T12:33:09.522Z",
+    "timestamp": "2020-03-25T13:20:57.522Z",
     "kr": {
         "title": "코로나바이러스감염증-19 국내 발생현황 (3.25. 00시 기준) - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
@@ -12,7 +12,7 @@
     "us": {
         "title": "COVID-19 Daily Report",
         "credit": "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
-        "timestamp": "03-24-2020 23:59 UTC, 19:59 EDT)",
+        "timestamp": "03-24-2020 23:59 UTC, 19:59 EDT",
         "confirmed": 53740,
         "death": 706,
         "recovered": 348
