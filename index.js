@@ -206,40 +206,50 @@ let getUsStatus = async function () {
 }
 
 let getGaStatus = async function () {
-    const body = await getBodyFromUrl("https://dph.georgia.gov/covid-19-daily-status-report");
+    // const body = await getBodyFromUrl("https://dph.georgia.gov/covid-19-daily-status-report");
+    const body = await getBodyFromUrl("https://d20s4vd27d0hk0.cloudfront.net/");
 
-    // fs.writeFileSync('./data.html', body);
+    fs.writeFileSync('./data.html', body);
     let gaTotal = {
         Total: "",
+        Hospitalized: "",
         Deaths: ""
     };
     let topTenCounties = [];
     let reportGenerated = "";
 
     const $ = cheerio.load(body);
-    $(".stacked-row-plus").each(function () {
-        let caption = $(this).find("caption").text();
-        if (caption.includes('Confirmed cases and deaths in Georgia')) {
-            $(this).find('tbody').find('tr').each(function () {
-                let element = $(this).text();
-                let split = element.split('\n');
-                gaTotal[split[0]] = split[1];
-            });
-        }
-        else if (caption.includes('by County')) {
-            let counties = [];
-            $(this).find('tbody').find('tr').each(function () {
-                let element = $(this).text();
-                let split = element.split('\n');
-                counties.push(split);
-            });
-            topTenCounties = counties.slice(0, 10);
-        }
+    $("#cont1").each(function () {
+        $(this).find("table").each(function () {
+            if ($(this).text().includes("COVID-19 Confirmed Cases:")) {
+                $(this).children().find("tr").each(function () {
+                    let cells = $(this).find("td");
+                    if (cells.length > 1) {
+                        let text = $(cells[0]).text();
+                        if (text === "Total" || text === "Hospitalized" || text === "Deaths") {
+                            gaTotal[text] = $(cells[1]).text();
+                        }
+                    }
+                });
+            }
+            if ($(this).text().includes("COVID-19 Confirmed Cases By County:")) {
+                $(this).children().find("tr").each(function() {
+                    let cells = $(this).find("td");
+                    if(cells.length > 1 && $(cells[0]).text() !== "COVID-19 Confirmed Cases By County:") {
+                        let countyName = $(cells[0]).text();
+                        let value = $(cells[1]).text();
+                        topTenCounties.push([countyName, value.trim()]);
+                    }
+                });              
+            }
+        });
     });
 
-    $(".body-content").children().find("em").each(function () {
+    topTenCounties = topTenCounties.slice(0, 10);
+
+    $("i").each(function () {
         let element = $(this).text();
-        if (element.includes("generated on:")) {
+        if (element.includes("Generated On :")) {
             reportGenerated = element.split(': ')[1] + " EDT";
         }
     })
@@ -286,10 +296,11 @@ let getGaStatus = async function () {
 async function main() {
 
     let today = new Date();
+    let krData, usData, gaData;
 
-    let krData = await getKoreaStatus();
-    let usData = await getUsStatus();
-    let gaData = await getGaStatus();
+    krData = await getKoreaStatus();
+    usData = await getUsStatus();
+    gaData = await getGaStatus();
 
     let data = {
         timestamp: today.toISOString(),
