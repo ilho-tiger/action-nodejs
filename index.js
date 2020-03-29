@@ -219,7 +219,7 @@ let getGaStatus = async function () {
     let reportGenerated = "";
 
     const $ = cheerio.load(body);
-    $("#cont1").each(function () {
+    $("#summary").each(function () {
         $(this).find("table").each(function () {
             if ($(this).text().includes("COVID-19 Confirmed Cases:")) {
                 $(this).children().find("tr").each(function () {
@@ -298,8 +298,8 @@ async function main() {
     let today = new Date();
     let krData, usData, gaData;
 
-    krData = await getKoreaStatus();
-    usData = await getUsStatus();
+    // krData = await getKoreaStatus();
+    // usData = await getUsStatus();
     gaData = await getGaStatus();
 
     let data = {
@@ -308,7 +308,7 @@ async function main() {
         us: usData,
         ga: gaData
     };
-    // console.log(JSON.stringify(data));
+    console.log(JSON.stringify(data));
     fs.writeFileSync(result_file, JSON.stringify(data, null, 4));
 
 }
