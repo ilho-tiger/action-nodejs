@@ -298,8 +298,8 @@ async function main() {
     let today = new Date();
     let krData, usData, gaData;
 
-    // krData = await getKoreaStatus();
-    // usData = await getUsStatus();
+    krData = await getKoreaStatus();
+    usData = await getUsStatus();
     gaData = await getGaStatus();
 
     let data = {
