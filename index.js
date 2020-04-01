@@ -142,13 +142,17 @@ let getKoreaStatus = async function () {
 };
 
 let getUsStatus = async function () {
-    let today = new Date();
-    let dateFormat = getTwoDigitPaddedNumberString(today.getMonth() + 1) + "-" + getTwoDigitPaddedNumberString(today.getDate() - 1) + "-" + today.getFullYear();
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() -1);
+
+    const dateFormat = getTwoDigitPaddedNumberString(yesterday.getMonth() + 1) + "-" + getTwoDigitPaddedNumberString(yesterday.getDate()) + "-" + today.getFullYear();
 
     let resultString = "";
     resultString += "COVID-19 Daily Report (US Only / " + dateFormat + " 23:59 UTC, 19:59 EDT)\n";
     resultString += "Data taken from Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)\n\n"
-    const body = await getBodyFromUrl("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/" + dateFormat + ".csv");
+    const url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/" + dateFormat + ".csv";
+    const body = await getBodyFromUrl(url);
 
     // fs.writeFileSync('./data.csv', body);
     let dailyReport = Papa.parse(body);
