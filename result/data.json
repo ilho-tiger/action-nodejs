@@ -1,21 +1,21 @@
 {
-    "timestamp": "2020-04-01T00:30:54.974Z",
+    "timestamp": "2020-04-01T10:55:29.155Z",
     "kr": {
-        "title": "코로나바이러스감염증-19 국내 발생현황 (3.31. 00시 기준) - (한국시각)",
+        "title": "코로나바이러스감염증-19 국내 발생현황 (4.1. 00시 기준) - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
-        "timestamp": "코로나바이러스감염증-19 국내 발생현황 (3.31. 00시 기준) - (한국시각)",
-        "confirmed": 9786,
-        "death": 162,
-        "recovered": 5408,
-        "active": 4216
+        "timestamp": "코로나바이러스감염증-19 국내 발생현황 (4.1. 00시 기준) - (한국시각)",
+        "confirmed": 9887,
+        "death": 165,
+        "recovered": 5567,
+        "active": 4155
     },
     "us": {
         "title": "COVID-19 Daily Report",
         "credit": "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
-        "timestamp": "04-00-2020 23:59 UTC, 19:59 EDT",
-        "confirmed": 0,
-        "death": 0,
-        "recovered": 0
+        "timestamp": "03-31-2020 23:59 UTC, 19:59 EDT",
+        "confirmed": 188172,
+        "death": 3873,
+        "recovered": 7024
     },
     "ga": {
         "title": "COVID-19 Daily Status Report",
