@@ -1,80 +1,80 @@
 {
-    "timestamp": "2020-04-14T00:31:09.127Z",
+    "timestamp": "2020-04-14T16:31:01.740Z",
     "kr": {
-        "title": "코로나바이러스감염증-19 국내 발생현황 (4.13. 00시 기준) - (한국시각)",
+        "title": "코로나바이러스감염증-19 국내 발생현황 (4.14. 00시 기준) - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
-        "timestamp": "코로나바이러스감염증-19 국내 발생현황 (4.13. 00시 기준) - (한국시각)",
-        "confirmed": 10537,
-        "death": 217,
-        "recovered": 7447,
-        "active": 2873
+        "timestamp": "코로나바이러스감염증-19 국내 발생현황 (4.14. 00시 기준) - (한국시각)",
+        "confirmed": 10564,
+        "death": 222,
+        "recovered": 7534,
+        "active": 2808
     },
     "us": {
         "title": "COVID-19 Daily Report",
         "credit": "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
         "timestamp": "04-13-2020 23:59 UTC, 19:59 EDT",
-        "confirmed": 682619,
+        "confirmed": 580619,
         "death": 23529,
         "recovered": 43482
     },
     "ga": {
         "title": "COVID-19 Daily Status Report",
         "credit": "Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)",
-        "timestamp": "04/13/2020 18:27:58 EDT",
-        "confirmed": 13621,
-        "death": 480,
+        "timestamp": "04/14/2020 11:28:04 EDT",
+        "confirmed": 14223,
+        "death": 501,
         "recovered": 0,
         "extra": {
             "perCounties": [
                 {
                     "rank": 1,
                     "name": "Fulton",
-                    "confirmed": "1635"
+                    "confirmed": "1774"
                 },
                 {
                     "rank": 2,
                     "name": "Dougherty",
-                    "confirmed": "1245"
+                    "confirmed": "1286"
                 },
                 {
                     "rank": 3,
                     "name": "Dekalb",
-                    "confirmed": "1006"
+                    "confirmed": "1067"
                 },
                 {
                     "rank": 4,
                     "name": "Cobb",
-                    "confirmed": "816"
+                    "confirmed": "874"
                 },
                 {
                     "rank": 5,
                     "name": "Gwinnett",
-                    "confirmed": "766"
+                    "confirmed": "794"
                 },
                 {
                     "rank": 6,
                     "name": "Clayton",
-                    "confirmed": "396"
+                    "confirmed": "427"
                 },
                 {
                     "rank": 7,
                     "name": "Hall",
-                    "confirmed": "319"
+                    "confirmed": "339"
                 },
                 {
                     "rank": 8,
                     "name": "Henry",
-                    "confirmed": "289"
+                    "confirmed": "302"
                 },
                 {
                     "rank": 9,
-                    "name": "Lee",
-                    "confirmed": "255"
+                    "name": "Sumter",
+                    "confirmed": "265"
                 },
                 {
                     "rank": 10,
-                    "name": "Sumter",
-                    "confirmed": "251"
+                    "name": "Lee",
+                    "confirmed": "257"
                 }
             ]
         }
