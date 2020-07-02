@@ -1,80 +1,80 @@
 {
-    "timestamp": "2020-07-02T00:40:12.549Z",
+    "timestamp": "2020-07-02T16:30:58.659Z",
     "kr": {
         "title": "코로나바이러스감염증-19 국내 발생현황 - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
         "timestamp": "코로나바이러스감염증-19 국내 발생현황 - (한국시각)",
-        "confirmed": 12850,
-        "death": 282,
-        "recovered": 11613,
-        "active": 955
+        "confirmed": 0,
+        "death": 0,
+        "recovered": 0,
+        "active": 0
     },
     "us": {
         "title": "COVID-19 Daily Report",
         "credit": "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
         "timestamp": "07-01-2020 23:59 UTC, 19:59 EDT",
-        "confirmed": 0,
-        "death": 0,
-        "recovered": 0
+        "confirmed": 2686258,
+        "death": 128062,
+        "recovered": 729994
     },
     "ga": {
         "title": "COVID-19 Daily Status Report",
         "credit": "Georgia Department of Public Health (<https://dph.georgia.gov/covid-19-daily-status-report>)",
-        "timestamp": "07/01/2020 18:27:56 EDT",
-        "confirmed": 84967,
-        "death": 2834,
+        "timestamp": "07/02/2020 11:28:00 EDT",
+        "confirmed": 87757,
+        "death": 2850,
         "recovered": 0,
         "extra": {
             "perCounties": [
                 {
                     "rank": 1,
                     "name": "Gwinnett",
-                    "confirmed": "8536"
+                    "confirmed": "8625"
                 },
                 {
                     "rank": 2,
                     "name": "Fulton",
-                    "confirmed": "7444"
+                    "confirmed": "7536"
                 },
                 {
                     "rank": 3,
                     "name": "Dekalb",
-                    "confirmed": "6033"
+                    "confirmed": "6180"
                 },
                 {
                     "rank": 4,
                     "name": "Cobb",
-                    "confirmed": "5181"
+                    "confirmed": "5310"
                 },
                 {
                     "rank": 5,
                     "name": "Hall",
-                    "confirmed": "3287"
+                    "confirmed": "3311"
                 },
                 {
                     "rank": 6,
                     "name": "Clayton",
-                    "confirmed": "2053"
+                    "confirmed": "2083"
                 },
                 {
                     "rank": 7,
                     "name": "Dougherty",
-                    "confirmed": "1916"
+                    "confirmed": "1923"
                 },
                 {
                     "rank": 8,
                     "name": "Muscogee",
-                    "confirmed": "1752"
+                    "confirmed": "1835"
                 },
                 {
                     "rank": 9,
                     "name": "Troup",
-                    "confirmed": "1507"
+                    "confirmed": "1516"
                 },
                 {
                     "rank": 10,
                     "name": "Chatham",
-                    "confirmed": "1414"
+                    "confirmed": "1507"
                 }
             ]
         }
