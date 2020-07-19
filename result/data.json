@@ -1,5 +1,5 @@
 {
-    "timestamp": "2020-07-19T00:45:13.869Z",
+    "timestamp": "2020-07-19T16:31:17.233Z",
     "kr": {
         "title": "코로나바이러스감염증-19 국내 발생현황 - (한국시각)",
         "credit": "대한민국 질병관리본부 제공 (http://ncov.mohw.go.kr)",
@@ -13,9 +13,9 @@
         "title": "COVID-19 Daily Report",
         "credit": "Johns Hopkins CSSE Dataset (https://github.com/CSSEGISandData/COVID-19)",
         "timestamp": "07-18-2020 23:59 UTC, 19:59 EDT",
-        "confirmed": 0,
-        "death": 0,
-        "recovered": 0
+        "confirmed": 3711413,
+        "death": 140119,
+        "recovered": 1122720
     },
     "ga": {
         "title": "COVID-19 Daily Status Report",
