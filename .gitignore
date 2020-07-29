@@ -108,3 +108,6 @@ dist
 
 data.html
 data.csv
+
+*.zip
+*.csv
