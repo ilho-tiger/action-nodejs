@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -62,6 +64,8 @@ func processFinalData(stat covidStat) {
 		message += fmt.Sprintf("- %d: %s (%d)\n", i+1, countyName, countyValue)
 	}
 	fmt.Println("\n" + message)
+	file, _ := json.MarshalIndent(stat, "", " ")
+	_ = ioutil.WriteFile("data.json", file, 0644)
 }
 
 func getPercentRatio(numerator, denominator int) float32 {
