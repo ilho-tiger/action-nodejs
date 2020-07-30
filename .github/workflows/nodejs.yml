@@ -13,28 +13,22 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Install golang
+        uses: actions/setup-go@v2
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: npm install
-        run: npm install
+          go-version: 1.14.4
 
       - name: Run crawler script
-        run: node index.js
+        run: go run .
+        working-directory: ./golang
         env:
           CI: true
           slack_webhook: ${{ secrets.slack_webhook }}
-          action_slack: ${{ secrets.action_slack }}
+          enable_slack: ${{ secrets.action_slack }}
 
       - name: Save data
         run: |
