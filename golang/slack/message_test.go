@@ -1,11 +1,18 @@
 package slack
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestSendMessage(t *testing.T) {
-	expected := 200
-	actual := SendMessage("from unit test")
-	if actual != expected {
-		t.Errorf("expecting %v but got %v", expected, actual)
+func Test_SendMessage(t *testing.T) {
+	err := SendMessage("from unit test")
+	if err != nil {
+		t.Errorf("got %v", err)
 	}
+}
+
+func Test_getWebhookURL(t *testing.T) {
+	err := getWebhookURL()
+	t.Log("value:", webhookURL)
+	t.Log("err:", err)
 }

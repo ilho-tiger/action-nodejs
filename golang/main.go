@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/ilho-tiger/action-nodejs/slack"
 	"github.com/ilho-tiger/action-nodejs/zip"
 )
 
@@ -63,6 +64,7 @@ func processFinalData(stat covidStat) {
 		}
 		message += fmt.Sprintf("- %d: %s (%d)\n", i+1, countyName, countyValue)
 	}
+	slack.SendMessage(message)
 	fmt.Println("\n" + message)
 	file, _ := json.MarshalIndent(stat, "", " ")
 	_ = ioutil.WriteFile("data.json", file, 0644)
