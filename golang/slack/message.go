@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 )
@@ -11,11 +12,17 @@ import (
 var webhookURL string = ""
 
 const (
-	webhookEnvVarName = "slack_webhook"
+	enableSlackEnvVarName = "enable_slack"
+	webhookEnvVarName     = "slack_webhook"
 )
 
 // SendMessage will send given message as a Slack incoming webhook
 func SendMessage(message string) error {
+	if isSlackEnabled() == false {
+		log.Println("Slack message is disabled by the envrionment, skipping.")
+		fmt.Printf("\n%s\n", message)
+		return nil
+	}
 	getWebhookURL()
 	var err error = nil
 
@@ -32,6 +39,14 @@ func SendMessage(message string) error {
 	}
 	defer resp.Body.Close()
 	return err
+}
+
+func isSlackEnabled() bool {
+	value := os.Getenv(enableSlackEnvVarName)
+	if value == "true" {
+		return true
+	}
+	return false
 }
 
 // SetWebhookURL sets the webhook url to use for Slack

@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +11,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/ilho-tiger/action-nodejs/persist"
 	"github.com/ilho-tiger/action-nodejs/slack"
 	"github.com/ilho-tiger/action-nodejs/zip"
 )
@@ -31,43 +30,76 @@ const (
 )
 
 type covidStat struct {
-	perCountyRecords [][]string
-	positive         int
-	death            int
-	hospitalization  int
+	Positive         int
+	Death            int
+	Hospitalization  int
+	PerCountyRecords [][]string
 }
 
 func main() {
 	sanityClean()
 
-	records := getDataFromGDPH()
-	stat := constructCovidStatFromGDPHRecords(records)
-	processFinalData(stat)
+	newStat := constructCovidStatFromGDPHRecords(getDataFromGDPH())
+	previousStat := loadPreviousData()
+	processFinalData(newStat, previousStat)
 
 	sanityClean()
 }
 
-func processFinalData(stat covidStat) {
+func loadPreviousData() covidStat {
+	var stat2 covidStat
+	if err := persist.Load("data.json", &stat2); err != nil {
+		log.Fatal("Failed to load: ", err)
+	}
+	return stat2
+}
+
+func processFinalData(newStat covidStat, previousStat covidStat) {
 	now := time.Now()
 	message := fmt.Sprintf("COVID-19 Daily Status Report (GA Only / %s)\n", now.Format("01-02-2006 15:04:05 MST"))
 	message += fmt.Sprintf("Data from Georgia Department of Public Health (https://dph.georgia.gov/covid-19-daily-status-report)\n\n")
-	message += fmt.Sprintf("(GA Total Confirmed) %d\n", stat.positive)
-	message += fmt.Sprintf("(GA Total Deaths) %d (%.2f%%)\n", stat.death, getPercentRatio(stat.death, stat.positive))
-	message += fmt.Sprintf("(GA Total Hospitalization) %d (%.2f%%)\n\n", stat.hospitalization, getPercentRatio(stat.hospitalization, stat.positive))
+	message += fmt.Sprintf("(GA Total Confirmed) %d (%s)\n", newStat.Positive, getDifferenceString(previousStat.Positive, newStat.Positive))
+	message += fmt.Sprintf("(GA Total Deaths) %d (%.2f%%, %s)\n", newStat.Death, getPercentRatio(newStat.Death, newStat.Positive), getDifferenceString(previousStat.Death, newStat.Death))
+	message += fmt.Sprintf("(GA Total Hospitalization) %d (%.2f%%, %s)\n\n", newStat.Hospitalization, getPercentRatio(newStat.Hospitalization, newStat.Positive), getDifferenceString(previousStat.Hospitalization, newStat.Hospitalization))
 
 	message += fmt.Sprintf("(Top 10 Counties in GA):\n")
 	for i := 0; i < 10; i++ {
-		countyName := stat.perCountyRecords[i][0]
-		countyValue, err := strconv.Atoi(stat.perCountyRecords[i][positive])
+		countyName := newStat.PerCountyRecords[i][0]
+		countyValue, err := strconv.Atoi(newStat.PerCountyRecords[i][positive])
 		if err != nil {
 			log.Fatal("Fail to parse", err)
 		}
-		message += fmt.Sprintf("- %d: %s (%d)\n", i+1, countyName, countyValue)
+		previousValue, err := findCountyStat(countyName, previousStat)
+		if err != nil {
+			previousValue = 0
+		}
+		message += fmt.Sprintf("- %d: (%s) %d (%s)\n", i+1, countyName, countyValue, getDifferenceString(previousValue, countyValue))
 	}
 	slack.SendMessage(message)
-	fmt.Println("\n" + message)
-	file, _ := json.MarshalIndent(stat, "", " ")
-	_ = ioutil.WriteFile("data.json", file, 0644)
+	if err := persist.Save("data.json", newStat); err != nil {
+		log.Fatal("Fail to save stat as a file:", err)
+	}
+}
+
+func findCountyStat(countyName string, stat covidStat) (int, error) {
+	for _, countyData := range stat.PerCountyRecords {
+		if countyData[0] == countyName {
+			countyValue, err := strconv.Atoi(countyData[positive])
+			if err != nil {
+				log.Fatal("Fail to parse", err)
+			}
+			return countyValue, nil
+		}
+	}
+	return -1, fmt.Errorf("No county named %s found", countyName)
+}
+
+func getDifferenceString(oldValue, newValue int) string {
+	diff := newValue - oldValue
+	if diff >= 0 {
+		return "+" + strconv.Itoa(diff)
+	}
+	return strconv.Itoa(diff)
 }
 
 func getPercentRatio(numerator, denominator int) float32 {
@@ -79,12 +111,12 @@ func constructCovidStatFromGDPHRecords(records [][]string) covidStat {
 
 	log.Println("Sorting by positive cases...")
 	sortCovidData(records[1:], positive)
-	stat.perCountyRecords = records[1:] // save sorted data
+	stat.PerCountyRecords = records[1:] // save sorted data
 
 	log.Println("Getting total summaries...")
-	stat.positive = sumCovidData(records[1:], positive)
-	stat.death = sumCovidData(records[1:], death)
-	stat.hospitalization = sumCovidData(records[1:], hospitalization)
+	stat.Positive = sumCovidData(records[1:], positive)
+	stat.Death = sumCovidData(records[1:], death)
+	stat.Hospitalization = sumCovidData(records[1:], hospitalization)
 
 	return stat
 }
