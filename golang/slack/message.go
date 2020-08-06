@@ -18,7 +18,7 @@ const (
 
 // SendMessage will send given message as a Slack incoming webhook
 func SendMessage(message string) error {
-	if isSlackEnabled() == false {
+	if IsSlackEnabled() == false {
 		log.Println("Slack message is disabled by the envrionment, skipping.")
 		fmt.Printf("\n%s\n", message)
 		return nil
@@ -41,7 +41,8 @@ func SendMessage(message string) error {
 	return err
 }
 
-func isSlackEnabled() bool {
+// IsSlackEnabled returns slack message configuration
+func IsSlackEnabled() bool {
 	value := os.Getenv(enableSlackEnvVarName)
 	if value == "true" {
 		return true

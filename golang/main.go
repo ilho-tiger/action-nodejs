@@ -18,9 +18,11 @@ import (
 
 const (
 	gdphdData             string = "https://ga-covid19.ondemand.sas.com/docs/ga_covid_data.zip"
+	rtData                string = "https://d14wlfuexuxgcm.cloudfront.net/covid/rt.csv"
 	dataArchiveFilename   string = "./ga_covid_data.zip"
 	dataPerCountyFilename string = "countycases.csv"
 	dataDir               string = "./dataToday"
+	rtCsvFilename         string = "rt.csv"
 )
 
 const (
@@ -41,7 +43,9 @@ func main() {
 
 	newStat := constructCovidStatFromGDPHRecords(getDataFromGDPH())
 	previousStat := loadPreviousData()
-	processFinalData(newStat, previousStat)
+	rtRate := getRtData()
+
+	processFinalData(newStat, previousStat, rtRate)
 
 	sanityClean()
 }
@@ -54,13 +58,15 @@ func loadPreviousData() covidStat {
 	return stat2
 }
 
-func processFinalData(newStat covidStat, previousStat covidStat) {
+func processFinalData(newStat covidStat, previousStat covidStat, rtRate float64) {
 	now := time.Now()
 	message := fmt.Sprintf("COVID-19 Daily Status Report (GA Only / %s)\n", now.Format("01-02-2006 15:04:05 MST"))
-	message += fmt.Sprintf("Data from Georgia Department of Public Health (https://dph.georgia.gov/covid-19-daily-status-report)\n\n")
+	message += fmt.Sprintf("Data from Georgia Department of Public Health (https://dph.georgia.gov/covid-19-daily-status-report)\n")
+	message += fmt.Sprintf("Rt data from RT Covid Live (https://rt.live/us/GA)\n\n")
 	message += fmt.Sprintf("(GA Total Confirmed) %d (%s)\n", newStat.Positive, getDifferenceString(previousStat.Positive, newStat.Positive))
 	message += fmt.Sprintf("(GA Total Deaths) %d (%.2f%%, %s)\n", newStat.Death, getPercentRatio(newStat.Death, newStat.Positive), getDifferenceString(previousStat.Death, newStat.Death))
-	message += fmt.Sprintf("(GA Total Hospitalization) %d (%.2f%%, %s)\n\n", newStat.Hospitalization, getPercentRatio(newStat.Hospitalization, newStat.Positive), getDifferenceString(previousStat.Hospitalization, newStat.Hospitalization))
+	message += fmt.Sprintf("(GA Total Hospitalization) %d (%.2f%%, %s)\n", newStat.Hospitalization, getPercentRatio(newStat.Hospitalization, newStat.Positive), getDifferenceString(previousStat.Hospitalization, newStat.Hospitalization))
+	message += fmt.Sprintf("(GA Rt Infection Rate) %s\n\n", fmt.Sprintf("%.2f", rtRate))
 
 	message += fmt.Sprintf("(Top 10 Counties in GA):\n")
 	for i := 0; i < 10; i++ {
@@ -76,8 +82,10 @@ func processFinalData(newStat covidStat, previousStat covidStat) {
 		message += fmt.Sprintf("- %d: (%s) %d (%s)\n", i+1, countyName, countyValue, getDifferenceString(previousValue, countyValue))
 	}
 	slack.SendMessage(message)
-	if err := persist.Save("data.json", newStat); err != nil {
-		log.Fatal("Fail to save stat as a file:", err)
+	if slack.IsSlackEnabled() {
+		if err := persist.Save("data.json", newStat); err != nil {
+			log.Fatal("Fail to save stat as a file:", err)
+		}
 	}
 }
 
@@ -125,8 +133,39 @@ func getDataFromGDPH() [][]string {
 	log.Println("Downloading GA COVID data...")
 	downloadData(gdphdData, dataArchiveFilename)
 	zip.Unzip(dataArchiveFilename, dataDir)
-	log.Println("Parsing data...")
+	log.Println("Parsing GA COVID data...")
 	return csvReader(dataDir + "/" + dataPerCountyFilename)
+}
+
+func getRtData() float64 {
+	log.Println("Downloading Rt data...")
+	downloadData(rtData, rtCsvFilename)
+	log.Println("Parsing Rt data...")
+	data := csvReader(rtCsvFilename)
+	gaOnly := filterByColValue(data, "region", "GA")
+	latestRt, _ := strconv.ParseFloat(gaOnly[len(gaOnly)-1][3], 64)
+	return latestRt
+}
+
+func filterByColValue(dataset [][]string, col string, value string) [][]string {
+	var colIdx int = -1
+	for idx, colName := range dataset[0] {
+		if colName == col {
+			colIdx = idx
+			break
+		}
+	}
+	if colIdx < 0 {
+		return nil
+	}
+
+	var filteredDataSet [][]string
+	for _, data := range dataset {
+		if data[colIdx] == value {
+			filteredDataSet = append(filteredDataSet, data)
+		}
+	}
+	return filteredDataSet
 }
 
 func sumCovidData(records [][]string, col int) int {
