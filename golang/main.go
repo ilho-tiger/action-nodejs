@@ -20,7 +20,7 @@ const (
 	gdphdData             string = "https://ga-covid19.ondemand.sas.com/docs/ga_covid_data.zip"
 	rtData                string = "https://d14wlfuexuxgcm.cloudfront.net/covid/rt.csv"
 	dataArchiveFilename   string = "./ga_covid_data.zip"
-	dataPerCountyFilename string = "countycases.csv"
+	dataPerCountyFilename string = "county_cases.csv"
 	dataDir               string = "./dataToday"
 	rtCsvFilename         string = "rt.csv"
 )
