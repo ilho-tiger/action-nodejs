@@ -26,9 +26,9 @@ const (
 )
 
 const (
-	positive int = iota + 1
-	death
-	hospitalization
+	positive        int = 1
+	death               = 7
+	hospitalization     = 6
 )
 
 type covidStat struct {
@@ -173,7 +173,7 @@ func sumCovidData(records [][]string, col int) int {
 	for _, record := range records {
 		value, err := strconv.Atoi(record[col])
 		if err != nil {
-			log.Fatal("Failed to parse case counts", err)
+			log.Fatal("Failed to parse case counts: ", err)
 		}
 		sum += value
 	}
@@ -184,11 +184,11 @@ func sortCovidData(records [][]string, sortByCol int) {
 	sort.Slice(records, func(i, j int) bool {
 		valuei, err := strconv.Atoi(records[i][sortByCol])
 		if err != nil {
-			log.Fatal("Failed to parse cases", err)
+			log.Fatal("Failed to parse cases: ", err)
 		}
 		valuej, err := strconv.Atoi(records[j][sortByCol])
 		if err != nil {
-			log.Fatal("Failed to parse cases", err)
+			log.Fatal("Failed to parse cases: ", err)
 		}
 		return valuei > valuej
 	})
